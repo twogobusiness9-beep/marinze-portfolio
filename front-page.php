@@ -98,7 +98,7 @@ $img       = $theme_uri . '/assets/images/projects';
             <div class="about-skill-tag">Digital Strategy</div>
           </div>
           <div class="about-floating-badge">
-            <strong>8+</strong>
+            <strong>5+</strong>
             <span>Sites Built</span>
           </div>
         </div>

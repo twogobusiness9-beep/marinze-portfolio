@@ -538,7 +538,7 @@ ul { list-style: none; }
 .project-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
   background: var(--white);
   border-radius: var(--r-xl);
   overflow: hidden;
@@ -554,30 +554,26 @@ ul { list-style: none; }
   position: relative;
   background: var(--gray-100);
   overflow: hidden;
+  min-height: 420px;
+  height: 20%;
 }
 .project-screenshots-inner {
   position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
   overflow: hidden;
 }
 .project-screen-hero {
   width: 100%;
-  height: 420px;
-  object-fit: cover;
+  height: 320px;
+  object-fit: center;
   object-position: top center;
   display: block;
 }
-.project-screen-hero {
-  height: 210px;
-}
-.project-screen-hero {
-  height: 260px;
-}
-.project-screen-hero {
-  height: 340px;
-}
 .project-screen-thumb-row {
   position: absolute;
-  bottom: 12px;
+  bottom: 25px;
   left: 12px;
   display: flex;
   gap: 8px;
@@ -935,11 +931,16 @@ ul { list-style: none; }
   }
   .project-screenshots {
     height: 340px;
+    min-height: unset;
   }
   .project-screenshots-inner {
     height: 340px;
+    min-height: unset;
   }
-
+  .project-screen-hero {
+    height: 340px;
+    min-height: unset;
+  }
 
   #testimonials .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -1027,11 +1028,16 @@ ul { list-style: none; }
   }
   .project-screenshots {
     height: 260px;
+    min-height: unset;
   }
   .project-screenshots-inner {
     height: 260px;
+    min-height: unset;
   }
-
+  .project-screen-hero {
+    height: 260px;
+    min-height: unset;
+  }
   .project-screen-thumb { width: 54px; height: 40px; }
   .project-info,
   .project-card:nth-child(even) .project-info {
@@ -1074,11 +1080,16 @@ ul { list-style: none; }
   #portfolio .portfolio-grid { gap: 1.25rem; }
   .project-screenshots {
     height: 210px;
+    min-height: unset;
   }
   .project-screenshots-inner {
     height: 210px;
+    min-height: unset;
   }
-
+  .project-screen-hero {
+    height: 210px;
+    min-height: unset;
+  }
   .project-screen-thumb-row { display: none; }
   .project-info,
   .project-card:nth-child(even) .project-info { padding: 1.25rem; }
