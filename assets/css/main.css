@@ -408,7 +408,7 @@ ul { list-style: none; }
   gap: .4rem;
 }
 .about-skill-tag::before {
-  content: 'â–¸';
+  content: '▸';
   color: var(--teal);
   font-size: .7rem;
 }
@@ -521,7 +521,7 @@ ul { list-style: none; }
   gap: .5rem;
 }
 .service-card ul li::before {
-  content: 'âœ“';
+  content: '▸';
   color: var(--teal);
   font-size: .75rem;
   font-weight: 700;
