@@ -566,6 +566,15 @@ ul { list-style: none; }
   object-position: top center;
   display: block;
 }
+.project-screen-hero {
+  height: 210px;
+}
+.project-screen-hero {
+  height: 260px;
+}
+.project-screen-hero {
+  height: 340px;
+}
 .project-screen-thumb-row {
   position: absolute;
   bottom: 12px;
@@ -930,9 +939,7 @@ ul { list-style: none; }
   .project-screenshots-inner {
     height: 340px;
   }
-  .project-screen-hero {
-    height: 340px;
-  }
+
 
   #testimonials .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -1024,9 +1031,7 @@ ul { list-style: none; }
   .project-screenshots-inner {
     height: 260px;
   }
-  .project-screen-hero {
-    height: 260px;
-  }
+
   .project-screen-thumb { width: 54px; height: 40px; }
   .project-info,
   .project-card:nth-child(even) .project-info {
@@ -1073,9 +1078,7 @@ ul { list-style: none; }
   .project-screenshots-inner {
     height: 210px;
   }
-  .project-screen-hero {
-    height: 210px;
-  }
+
   .project-screen-thumb-row { display: none; }
   .project-info,
   .project-card:nth-child(even) .project-info { padding: 1.25rem; }
