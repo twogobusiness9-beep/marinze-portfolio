@@ -41,13 +41,19 @@
 
 /* ── RESET ───────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden; /* FIX #1: prevent global horizontal scroll */
+}
 body {
   font-family: var(--font-body);
   color: var(--text);
   background: var(--white);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* FIX #1: belt-and-suspenders overflow guard */
+  max-width: 100%;
 }
 img { max-width: 100%; height: auto; display: block; }
 a { text-decoration: none; color: inherit; }
@@ -55,6 +61,7 @@ ul { list-style: none; }
 
 /* ── UTILITY ─────────────────────────────────────────────── */
 .container {
+  width: 100%;               /* FIX #8 */
   max-width: var(--container);
   margin: 0 auto;
   padding: 0 24px;
@@ -362,11 +369,12 @@ ul { list-style: none; }
 .about-card::before {
   content: '';
   position: absolute;
-  top: -60px; right: -60px;
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, rgba(37,99,235,.3), transparent 70%);
+  top: 0; right: 0;       /* FIX #2: removed negative offsets that leaked outside */
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(37,99,235,.25), transparent 70%);
   border-radius: 50%;
   pointer-events: none;
+  transform: translate(30%, -30%); /* visual shift stays inside visible area */
 }
 .about-avatar {
   width: 72px; height: 72px;
@@ -475,6 +483,8 @@ ul { list-style: none; }
   transition: all .3s ease;
   position: relative;
   overflow: hidden;
+  min-width: 0;            /* FIX #5: prevent grid blowout */
+  word-break: break-word;
 }
 .service-card::after {
   content: '';
@@ -531,13 +541,13 @@ ul { list-style: none; }
 #portfolio .portfolio-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 5rem;
+  gap: 3.5rem;          /* FIX #3: was 5rem — reduced base gap */
   margin-top: 3.5rem;
 }
 .project-card {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3.5rem;
+  gap: 0;                 /* FIX #9: gap handled by info padding, not column gap */
   align-items: start;
   background: var(--white);
   border-radius: var(--r-xl);
@@ -545,6 +555,7 @@ ul { list-style: none; }
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--gray-200);
   transition: box-shadow .3s;
+  min-width: 0;           /* FIX #5 */
 }
 .project-card:hover { box-shadow: var(--shadow-xl); }
 .project-card:nth-child(even) { direction: rtl; }
@@ -681,6 +692,8 @@ ul { list-style: none; }
   display: flex;
   gap: 1.25rem;
   transition: all .3s;
+  min-width: 0;           /* FIX #6 */
+  word-break: break-word;
 }
 .why-card:hover { background: rgba(255,255,255,.08); transform: translateY(-4px); }
 .why-icon {
@@ -716,6 +729,8 @@ ul { list-style: none; }
   padding: 2rem;
   box-shadow: var(--shadow-sm);
   transition: box-shadow .3s;
+  min-width: 0;           /* FIX #6 */
+  word-break: break-word;
 }
 .testimonial-card:hover { box-shadow: var(--shadow-md); }
 .testimonial-stars {
@@ -884,22 +899,52 @@ ul { list-style: none; }
   border: 3px solid rgba(255,255,255,.12);
 }
 
-/* ── RESPONSIVE ──────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — Full Audit Pass
+   Breakpoints: 1200 · 1024 · 768 · 480 · 360
+   ═══════════════════════════════════════════════════════════ */
 
-/* Tablet – 1024px */
+/* ── Laptop: 1200px ─────────────────────────────────────── */
+/* FIX #10: New laptop breakpoint — was completely missing   */
+@media (max-width: 1200px) {
+  :root { --container: 1100px; }
+
+  /* Services: keep 3-col but tighten padding */
+  .service-card { padding: 1.75rem; }
+
+  /* Portfolio: reduce gap between cards */
+  #portfolio .portfolio-grid { gap: 3rem; }
+
+  /* Contact: reduce gap from 4rem to 2.5rem */
+  #contact .contact-grid { gap: 2.5rem; }
+}
+
+/* ── Tablet: 1024px ─────────────────────────────────────── */
 @media (max-width: 1024px) {
   :root { --container: 960px; }
 
-  /* About */
+  /* ── Nav ── */
+  /* Hamburger shows at 768px; at 1024px desktop nav is still visible */
+  /* No nav changes needed here */
+
+  /* ── About ── */
   #about .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .about-visual { max-width: 480px; margin: 0 auto; }
-  .about-floating-badge { bottom: 12px; right: 12px; padding: .7rem .9rem; }
+  .about-visual { max-width: 440px; margin: 0 auto; }
+  /* FIX #11: badge goes static at tablet too — was staying absolute */
+  .about-floating-badge {
+    position: static;
+    display: inline-block;
+    margin-top: 1rem;
+    padding: .7rem 1rem;
+    border-radius: var(--r-md);
+  }
   .about-skills-grid { grid-template-columns: repeat(3, 1fr); }
 
-  /* Services */
+  /* ── Services ── */
   #services .services-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* Portfolio – stack cards, remove alternating RTL */
+  /* ── Portfolio ── */
+  #portfolio .portfolio-grid { gap: 2.5rem; }
   .project-card,
   .project-card:nth-child(even) {
     direction: ltr;
@@ -911,132 +956,209 @@ ul { list-style: none; }
   .project-card:nth-child(even) .project-info { padding: 2rem; }
   .project-screenshots { min-height: unset; }
   .project-screenshots-inner { height: 300px; overflow: hidden; }
-  .project-screen-hero { width: 100%; height: 300px; object-fit: cover; object-position: top; }
+  .project-screen-hero {
+    width: 100%; height: 300px;
+    object-fit: cover; object-position: top center;
+  }
 
-  /* Testimonials */
+  /* ── Why ── */
+  /* 2-col is fine at 1024px — no change needed */
+
+  /* ── Testimonials ── */
   #testimonials .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* ── Contact ── */
+  /* FIX #4: 2-col at 1024px was too tight — switch to 1-col */
+  #contact .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
-/* Mobile – 768px */
+/* ── Mobile: 768px ──────────────────────────────────────── */
 @media (max-width: 768px) {
   :root {
     --section-pad: 64px 0;
-    --gap: 1.25rem;
   }
 
   /* ── Nav ── */
   .nav-links {
     display: none;
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;                     /* top/right/bottom/left: 0 */
     background: rgba(13,27,42,.98);
     backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 0;
     z-index: 999;
     padding: 2rem 0;
+    overflow-y: auto;             /* scroll if many links */
   }
   .nav-links.open { display: flex; }
   .nav-links a {
     padding: 1rem 2rem;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 600;
     width: 100%;
     text-align: center;
     border-bottom: 1px solid rgba(255,255,255,.06);
     color: rgba(255,255,255,.9) !important;
+    white-space: nowrap;
   }
   .nav-links .nav-cta {
     margin-top: 1.5rem;
-    background: var(--accent);
+    background: var(--accent) !important;
     border-radius: var(--r-sm);
-    width: auto;
-    border-bottom: none;
+    width: auto !important;
+    border-bottom: none !important;
+    padding: .7rem 2rem !important;
   }
-  .nav-hamburger { display: flex; z-index: 1001; }
+  .nav-hamburger { display: flex; z-index: 1001; position: relative; }
 
   /* ── Hero ── */
-  #hero { padding: 100px 0 70px; }
-  .hero-name { font-size: clamp(2.5rem, 12vw, 3.5rem); }
-  .hero-headline { font-size: clamp(1.25rem, 5.5vw, 1.6rem); }
-  .hero-intro { font-size: .95rem; }
-  .hero-actions { flex-direction: column; align-items: flex-start; gap: .75rem; }
+  #hero { padding: 100px 0 60px; }
+  .hero-name { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+  .hero-title {
+    font-size: .95rem;
+    letter-spacing: .02em;
+    word-break: break-word;  /* FIX #7: prevent dot-separator orphan */
+  }
+  .hero-headline { font-size: clamp(1.2rem, 5vw, 1.55rem); }
+  .hero-intro { font-size: .95rem; max-width: 100%; }
+  /* FIX #12: full-width buttons with proper max-width */
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .75rem;
+    max-width: 400px;
+  }
   .hero-actions .btn { width: 100%; justify-content: center; }
   .hero-stats {
-    gap: 1.25rem 2rem;
-    padding-top: 2rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 1.5rem;
+    padding-top: 2rem;
   }
   .hero-stat-num { font-size: 1.6rem; }
   .hero-scroll { display: none; }
 
+  /* ── Section title ── */
+  .section-title { font-size: clamp(1.45rem, 5.5vw, 2rem); }
+
   /* ── About ── */
+  .about-card { padding: 1.5rem; }
   .about-skills-grid { grid-template-columns: repeat(2, 1fr); }
   .about-pillars { grid-template-columns: 1fr; }
-  .about-card { padding: 1.75rem; }
-  .about-floating-badge { position: static; margin-top: 1.25rem; display: inline-block; border-radius: var(--r-md); }
+  .about-floating-badge {
+    position: static;
+    display: inline-block;
+    margin-top: 1rem;
+    padding: .65rem .9rem;
+    border-radius: var(--r-md);
+  }
   .about-text p { font-size: .95rem; }
 
   /* ── Services ── */
   #services .services-grid { grid-template-columns: 1fr; }
-  .service-card { padding: 1.75rem; }
+  .service-card { padding: 1.5rem; }
 
   /* ── Portfolio ── */
+  #portfolio .portfolio-grid { gap: 2rem; }
   .project-card,
   .project-card:nth-child(even) {
     direction: ltr;
     grid-template-columns: 1fr;
     overflow: hidden;
+    border-radius: var(--r-lg);
   }
   .project-screenshots { min-height: unset; }
-  .project-screenshots-inner { height: 240px; overflow: hidden; }
-  .project-screen-hero { width: 100%; height: 240px; object-fit: cover; object-position: top; }
+  .project-screenshots-inner { height: 230px; overflow: hidden; }
+  .project-screen-hero {
+    width: 100%; height: 230px;
+    object-fit: cover; object-position: top center;
+  }
   .project-screen-thumb { width: 52px; height: 38px; }
   .project-info { padding: 1.5rem !important; }
   .project-card:nth-child(even) .project-info { padding: 1.5rem !important; }
-  .project-name { font-size: 1.25rem; }
+  .project-name { font-size: 1.2rem; }
   .project-psr { gap: .6rem; }
+  .psr-item { padding: .9rem 1rem; }
 
   /* ── Why ── */
   #why .why-grid { grid-template-columns: 1fr; }
-  .why-card { padding: 1.5rem; }
+  .why-card { padding: 1.5rem; gap: 1rem; }
 
   /* ── Testimonials ── */
   #testimonials .testimonials-grid { grid-template-columns: 1fr; }
+  .testimonial-card { padding: 1.5rem; }
 
   /* ── Contact ── */
-  #contact .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  .contact-form { padding: 1.75rem; }
+  #contact .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-form { padding: 1.5rem; }
   .form-row { grid-template-columns: 1fr; }
-
-  /* ── Section titles ── */
-  .section-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .contact-info h2 { font-size: clamp(1.4rem, 5vw, 1.9rem); }
 
   /* ── Footer ── */
-  .footer-inner { flex-direction: column; align-items: center; text-align: center; gap: .75rem; }
-  .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: .75rem;
+  }
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .75rem 1.25rem;
+  }
 }
 
-/* Small mobile – 480px */
+/* ── Small mobile: 480px ────────────────────────────────── */
 @media (max-width: 480px) {
-  :root { --section-pad: 52px 0; }
+  :root { --section-pad: 48px 0; }
   .container { padding: 0 16px; }
 
-  .hero-name { font-size: clamp(2.2rem, 13vw, 3rem); }
-  .hero-badge { font-size: .7rem; padding: .35rem .85rem; }
-  .btn { padding: .8rem 1.5rem; font-size: .9rem; }
+  /* ── Hero ── */
+  #hero { padding: 88px 0 56px; }
+  .hero-name { font-size: clamp(2rem, 12vw, 2.8rem); }
+  .hero-badge { font-size: .7rem; padding: .3rem .85rem; }
+  .hero-actions { max-width: 100%; }
+  .btn { padding: .8rem 1.4rem; font-size: .88rem; }
+  .hero-stats { gap: 1rem; }
 
+  /* ── About ── */
   .about-skills-grid { grid-template-columns: 1fr 1fr; }
-  .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .about-photo { max-width: 220px; }
 
-  .project-screenshots-inner { height: 190px; }
-  .project-screen-hero { height: 190px; }
-  .project-screen-thumb-row { display: none; }
+  /* ── Portfolio ── */
+  #portfolio .portfolio-grid { gap: 1.5rem; }
+  .project-screenshots-inner { height: 200px; overflow: hidden; }
+  .project-screen-hero { height: 200px; object-fit: cover; object-position: top center; }
+  .project-screen-thumb-row { display: none; } /* too small to be useful */
+  .project-info { padding: 1.25rem !important; }
 
+  /* ── Services ── */
+  .service-card { padding: 1.25rem; }
+
+  /* ── Why ── */
+  .why-card { flex-direction: column; gap: .75rem; padding: 1.25rem; }
+  .why-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+
+  /* ── Contact ── */
   .contact-form { padding: 1.25rem; border-radius: var(--r-lg); }
-  .psr-item { padding: .85rem 1rem; }
+  .contact-method { font-size: .82rem; padding: .75rem 1rem; }
+
+  /* ── Footer ── */
+  .footer-copy { font-size: .76rem; }
+}
+
+/* ── Extra small: 360px ─────────────────────────────────── */
+@media (max-width: 360px) {
+  .container { padding: 0 12px; }
+  .hero-name { font-size: clamp(1.8rem, 11vw, 2.4rem); }
+  .hero-title { font-size: .82rem; }
+  .about-skills-grid { grid-template-columns: 1fr; }
+  .btn { padding: .75rem 1.1rem; font-size: .84rem; }
+  .project-info { padding: 1rem !important; }
+  .service-card { padding: 1rem; }
 }
 
