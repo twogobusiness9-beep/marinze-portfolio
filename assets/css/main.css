@@ -538,7 +538,7 @@ ul { list-style: none; }
 .project-card {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: stretch;
+  align-items: start;
   background: var(--white);
   border-radius: var(--r-xl);
   overflow: hidden;
@@ -555,18 +555,18 @@ ul { list-style: none; }
   background: var(--gray-100);
   overflow: hidden;
   min-height: 420px;
-  height: 100%;
+  height: auto;
 }
 .project-screenshots-inner {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   min-height: 420px;
   overflow: hidden;
 }
 .project-screen-hero {
   width: 100%;
-  height: 100%;
+  height: 420px;
   min-height: 420px;
   object-fit: cover;
   object-position: top center;
