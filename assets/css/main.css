@@ -554,8 +554,7 @@ ul { list-style: none; }
   position: relative;
   background: var(--gray-100);
   overflow: hidden;
-  min-height: 420px;
-  height: 20%;
+  height: 420px;
 }
 .project-screenshots-inner {
   position: relative;
@@ -1095,18 +1094,18 @@ ul { list-style: none; }
 
   #portfolio .portfolio-grid { gap: 1.25rem; }
   .project-screenshots {
-    height: 210px;
+    height: 270px;
     min-height: unset;
   }
   .project-screenshots-inner {
-    height: 210px;
+    height: 270px;
     min-height: unset;
   }
   .project-screen-hero {
     height: 210px;
     min-height: unset;
   }
-  .project-screen-thumb-row { display: none; }
+  .project-screen-thumb-row { display: flex; }
   .project-info,
   .project-card:nth-child(even) .project-info { padding: 1.25rem; }
 
