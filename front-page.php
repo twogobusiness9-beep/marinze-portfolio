@@ -85,7 +85,7 @@ $img       = $theme_uri . '/assets/images/projects';
             alt="Marinze – Website Developer and SEO Specialist"
           >
           <div class="about-avatar" id="about-avatar-fallback" aria-hidden="true" style="display:none">M</div>
-          <div class="about-card-name">Marinze</div>
+          <div class="about-card-name">Fuck</div>
           <div class="about-card-role">Website Developer &amp; SEO/GEO Specialist</div>
           <div class="about-skills-grid">
             <div class="about-skill-tag">WordPress</div>
