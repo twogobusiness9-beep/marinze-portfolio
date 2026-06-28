@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Aurodent Dental Clinic">
+	<defs>
+		<linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0" stop-color="#f6df93"/>
+			<stop offset="0.45" stop-color="#d9b24a"/>
+			<stop offset="0.7" stop-color="#b88a1f"/>
+			<stop offset="1" stop-color="#e7c869"/>
+		</linearGradient>
+	</defs>
+
+	<!-- black disc with gold rim -->
+	<circle cx="200" cy="200" r="198" fill="#0e0d0b"/>
+	<circle cx="200" cy="200" r="190" fill="none" stroke="url(#gold)" stroke-width="3"/>
+	<circle cx="200" cy="200" r="184" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.5"/>
+
+	<!-- gold tooth -->
+	<path d="M200,80 C160,72 132,92 134,132 C135,162 148,188 156,212
+		C160,224 172,226 176,212 C180,198 186,192 200,192
+		C214,192 220,198 224,212 C228,226 240,224 244,212
+		C252,188 265,162 266,132 C268,92 240,72 200,80 Z" fill="url(#gold)"/>
+	<!-- inner shine line -->
+	<path d="M210,96 C236,96 250,114 248,140 C246,166 236,188 230,206"
+		fill="none" stroke="#fff6dc" stroke-width="3" stroke-linecap="round" opacity="0.65"/>
+
+	<!-- wordmark -->
+	<text x="200" y="292" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="46" letter-spacing="2" fill="url(#gold)">AURODENT</text>
+	<text x="200" y="322" text-anchor="middle" font-family="Georgia, serif" font-weight="600" font-size="17" letter-spacing="7" fill="url(#gold)">- DENTAL CLINIC -</text>
+</svg>
