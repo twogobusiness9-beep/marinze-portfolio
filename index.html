@@ -429,5 +429,27 @@
 </footer>
 
 <script src="assets/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+  emailjs.init("uxAQkszOwAffYR-jz");
+
+  document.getElementById("contact-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      emailjs.sendForm(
+          "service_lkojeua",
+          "template_puhnp5v",
+          this
+      )
+      .then(() => {
+          alert("Message sent successfully!");
+      })
+      .catch((error) => {
+          console.log("FAILED...", error);
+          alert("Failed to send message.");
+      });
+  });
+</script>
 </body>
 </html>
